@@ -1,6 +1,8 @@
 services:
   execution:
-    image: ghcr.io/base/node-reth:latest
+    build:
+      context: .
+      dockerfile: ${CLIENT:-reth}/Dockerfile
     ports:
       - "8645:8545" # RPC (changed to avoid conflict with L1)
       - "8646:8546" # websocket (changed to avoid conflict with L1)
@@ -17,7 +19,9 @@ services:
     env_file:
       - ${NETWORK_ENV:-.env.mainnet} # Use .env.mainnet by default, override with .env.sepolia for testnet
   node:
-    image: ghcr.io/base/node-reth:latest
+    build:
+      context: .
+      dockerfile: ${CLIENT:-reth}/Dockerfile
     depends_on:
       - execution
     ports:
